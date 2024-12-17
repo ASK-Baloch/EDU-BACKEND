@@ -1,44 +1,20 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import app from "./app.js";
-import User from "./models/user.js";
-
+import dotenv from 'dotenv';
 dotenv.config();
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
+const MONGO_URL = process.env.MONGO_URL;
 
-// Initialize Hardcoded SuperAdmin
-const initializeSuperAdmin = async () => {
-  try {
-    const existingSuperAdmin = await User.findOne({ role: "superadmin" });
-    if (!existingSuperAdmin) {
-      const superAdmin = new User({
-        name: "SuperAdmin",
-        email: "superadmin@example.com",
-        password: "superadmin123",
-        role: "superadmin",
-      });
-      await superAdmin.save();
-      console.log("SuperAdmin created!");
-    } else {
-      console.log("SuperAdmin already exists.");
-    }
-  } catch (error) {
-    console.error("Error initializing SuperAdmin:", error.message);
-  }
-};
-
-// Connect to DB and Start Server
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URL)
   .then(() => {
-    console.log("Connected to MongoDB");
-    initializeSuperAdmin();
-    app.listen(PORT, () =>
-      console.log(`Server running on http://localhost:${PORT}`)
-    );
+    console.log("MongoDB connected successfully.");
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
+    });
   })
-  .catch((err) => console.error("DB Connection Error:", err));
-
-  app.get('/', (req,res) => {
-    res.send(`Hello world `);
+  .catch((error) => {
+    console.error("MongoDB connection failed:", error.message);
   });
+
+app.get('/', (req, res) => res.send('Hello from Edu Backend!'));

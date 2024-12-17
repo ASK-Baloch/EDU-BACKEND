@@ -17,8 +17,14 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["superadmin", "admin", "teacher", "parent", "student"],
-    required: true,
+    enum: ["SuperAdmin", "Admin", "Teacher", "Parent", "Student"],
+    default: "Student",
+  },
+  otp: {
+    type: String,
+  },
+  otpExpires: {
+    type: Date,
   },
 });
 

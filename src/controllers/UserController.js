@@ -14,7 +14,7 @@ const generateToken = (user) => {
 };
 
 // 1. Send OTP for Login/Signup
-export const sendOTPToUser = async (req, res) => {
+export const sendUserOTP = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -61,8 +61,11 @@ export const verifyUserOTP = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    if (!user || !user.otp || user.otpExpires < Date.now()) {
+    if (!user.otp || user.otpExpires < Date.now()) {
       return res.status(400).json({ message: "OTP expired or invalid." });
     }
 
@@ -84,6 +87,6 @@ export const verifyUserOTP = async (req, res) => {
       role: user.role,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Failed to verify OTP:" + error.message });
   }
 };

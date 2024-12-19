@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Function to send OTP via email
 export const sendOTP = async (email, otp) => {

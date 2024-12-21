@@ -67,6 +67,263 @@ This repository contains Backend code For Educard.
       "error": "Invalid or expired OTP"
     }
     ```
+Here's a well-documented guide for all the school-related APIs formatted for inclusion in your `README.md` file.
+
+---
+
+# School Management APIs
+
+The following endpoints manage school registration, status updates, and listings. All APIs require authorization, and are restricted to `SuperAdmin` roles.
+
+---
+
+## **1. Register a New School**
+
+### **Endpoint**  
+`POST /api/schools`
+
+### **Authorization**  
+- **Role Required**: `SuperAdmin`
+
+### **Headers**  
+```json
+{
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+```
+
+### **Request Body**  
+```json
+{
+  "name": "Greenfield School",
+  "address": "123 Main St",
+  "email": "greenfield@example.com",
+  "password": "strongpassword123",
+  "contactNumber": "1234567890",
+  "principalName": "John Doe"
+}
+```
+
+### **Response**  
+#### **201 Created**  
+```json
+{
+  "message": "School registered successfully.",
+  "school": {
+    "_id": "64f8c1d9a2b7b12345678901",
+    "name": "Greenfield School",
+    "address": "123 Main St",
+    "email": "greenfield@example.com",
+    "password": "<hashed_password>",
+    "contactNumber": "1234567890",
+    "principalName": "John Doe",
+    "isActive": false,
+    "createdAt": "2024-12-21T10:00:00.000Z",
+    "updatedAt": "2024-12-21T10:00:00.000Z"
+  }
+}
+```
+
+#### **400 Bad Request**  
+```json
+{
+  "message": "Validation error: missing required fields."
+}
+```
+
+---
+
+## **2. Get All Registered Schools**
+
+### **Endpoint**  
+`GET /api/schools`
+
+### **Authorization**  
+- **Role Required**: `SuperAdmin`
+
+### **Headers**  
+```json
+{
+  "Authorization": "Bearer <token>"
+}
+```
+
+### **Response**  
+#### **200 OK**  
+```json
+{
+  "message": "Schools retrieved successfully.",
+  "schools": [
+    {
+      "_id": "64f8c1d9a2b7b12345678901",
+      "name": "Greenfield School",
+      "address": "123 Main St",
+      "email": "greenfield@example.com",
+      "contactNumber": "1234567890",
+      "principalName": "John Doe",
+      "isActive": false
+    },
+    {
+      "_id": "64f8c2d9a2b7b12345678902",
+      "name": "Bluefield School",
+      "address": "456 Elm St",
+      "email": "bluefield@example.com",
+      "contactNumber": "9876543210",
+      "principalName": "Jane Smith",
+      "isActive": true
+    }
+  ]
+}
+```
+
+---
+
+## **3. Update School Status**
+
+### **Endpoint**  
+`PUT /api/schools/:id/status`
+
+### **Authorization**  
+- **Role Required**: `SuperAdmin`
+
+### **Headers**  
+```json
+{
+  "Authorization": "Bearer <token>",
+  "Content-Type": "application/json"
+}
+```
+
+### **Request Parameters**  
+| Parameter | Type   | Description      |
+|-----------|--------|------------------|
+| `id`      | String | School's ObjectId |
+
+### **Request Body**  
+```json
+{
+  "isActive": true
+}
+```
+
+### **Response**  
+#### **200 OK**  
+```json
+{
+  "message": "School status updated successfully.",
+  "school": {
+    "_id": "64f8c1d9a2b7b12345678901",
+    "name": "Greenfield School",
+    "isActive": true,
+    "updatedAt": "2024-12-21T11:00:00.000Z"
+  }
+}
+```
+
+#### **404 Not Found**  
+```json
+{
+  "message": "School not found."
+}
+```
+
+---
+
+## **4. Get All Active Schools**
+
+### **Endpoint**  
+`GET /api/schools/active`
+
+### **Authorization**  
+- **Role Required**: `SuperAdmin`
+
+### **Headers**  
+```json
+{
+  "Authorization": "Bearer <token>"
+}
+```
+
+### **Response**  
+#### **200 OK**  
+```json
+{
+  "message": "Active schools retrieved successfully.",
+  "schools": [
+    {
+      "_id": "64f8c2d9a2b7b12345678902",
+      "name": "Bluefield School",
+      "address": "456 Elm St",
+      "email": "bluefield@example.com",
+      "contactNumber": "9876543210",
+      "principalName": "Jane Smith",
+      "isActive": true
+    }
+  ]
+}
+```
+
+---
+
+## **5. Get All Inactive Schools**
+
+### **Endpoint**  
+`GET /api/schools/inactive`
+
+### **Authorization**  
+- **Role Required**: `SuperAdmin`
+
+### **Headers**  
+```json
+{
+  "Authorization": "Bearer <token>"
+}
+```
+
+### **Response**  
+#### **200 OK**  
+```json
+{
+  "message": "Inactive schools retrieved successfully.",
+  "schools": [
+    {
+      "_id": "64f8c1d9a2b7b12345678901",
+      "name": "Greenfield School",
+      "address": "123 Main St",
+      "email": "greenfield@example.com",
+      "contactNumber": "1234567890",
+      "principalName": "John Doe",
+      "isActive": false
+    }
+  ]
+}
+```
+
+---
+
+## **Error Responses**
+
+### **401 Unauthorized**  
+```json
+{
+  "message": "Access denied."
+}
+```
+
+### **500 Internal Server Error**  
+```json
+{
+  "message": "An error occurred: <error details>"
+}
+```
+
+---
+
+### Notes:
+1. All APIs enforce strict role-based access control. Only users with the `SuperAdmin` role can interact with these endpoints.
+2. Ensure to replace `<token>` with a valid JWT for testing the APIs.
+3. Use tools like Postman or cURL to test these APIs efficiently.
 
 ## Prerequisites
 

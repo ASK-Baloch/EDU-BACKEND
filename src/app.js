@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import schoolRoutes from "./routes/schoolRoutes.js";
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+// Register the school routes
+app.use("/api/schools", schoolRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
